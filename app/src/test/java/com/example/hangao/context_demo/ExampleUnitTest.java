@@ -1,4 +1,4 @@
-package com.example.hangao.contextdetect;
+package com.example.hangao.context_demo;
 
 import org.junit.Test;
 
