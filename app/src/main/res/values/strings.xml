@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Context-demo</string>
+
+    <string name="status_prn_column_label">ID</string>
+    <string name="status_constellation_image_label">TYPE</string>
+    <string name="status_snr_column_label">SNR</string>
+    <string name="status_cn0_column_label">C/N0</string>
+    <string name="status_elevation_column_label">Elev</string>
+    <string name="status_elevation_column_value">%1$s\u00B0</string>
+    <string name="status_azimuth_column_label">Azim</string>
+    <string name="status_azimuth_column_value">%1$s\u00B0</string>
+
 </resources>
