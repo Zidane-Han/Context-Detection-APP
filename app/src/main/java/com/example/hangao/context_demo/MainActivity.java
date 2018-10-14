@@ -23,10 +23,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String[] REQUIRED_PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private static final int NUMBER_OF_FRAGMENTS = 2;
-    private static final int FRAGMENT_INDEX_STATUS = 0;
-    private static final int FRAGMENT_INDEX_SETTING = 1;
-    private static final int FRAGMENT_INDEX_LOGGER = 2;
+    private static final int NUMBER_OF_FRAGMENTS = 3;
+    private static final int FRAGMENT_INDEX_ACTIVITY = 0;
+    private static final int FRAGMENT_INDEX_STATUS = 1;
+    private static final int FRAGMENT_INDEX_SETTING = 2;
+
 
     private GnssContainer mGpsContainer;
     private UiLogger mUiLogger;
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                     return mFragments[FRAGMENT_INDEX_SETTING];
                 case FRAGMENT_INDEX_STATUS:
                     return mFragments[FRAGMENT_INDEX_STATUS];
-                case FRAGMENT_INDEX_LOGGER: // the third page
-                    return mFragments[FRAGMENT_INDEX_LOGGER];
+                case FRAGMENT_INDEX_ACTIVITY:
+                    return mFragments[FRAGMENT_INDEX_ACTIVITY];
                 default:
                     throw new IllegalArgumentException("Invalid section: " + position);
             }
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -98,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
         mGpsContainer = new GnssContainer(getApplicationContext(), mUiLogger);
 
         mFragments = new Fragment[NUMBER_OF_FRAGMENTS];
+
+        ActivityFragment activityFragment = new ActivityFragment();
+        mFragments[FRAGMENT_INDEX_ACTIVITY] = activityFragment;
+
         SettingFragment settingsFragment = new SettingFragment();
         settingsFragment.setGpsContainer(mGpsContainer);
         mFragments[FRAGMENT_INDEX_SETTING] = settingsFragment;
