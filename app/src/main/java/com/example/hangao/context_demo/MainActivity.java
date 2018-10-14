@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import java.util.Locale;
 
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                     return mFragments[FRAGMENT_INDEX_SETTING];
                 case FRAGMENT_INDEX_STATUS:
                     return mFragments[FRAGMENT_INDEX_STATUS];
-                case FRAGMENT_INDEX_LOGGER:
-                    return mFragments[FRAGMENT_INDEX_LOGGER];
+                //case FRAGMENT_INDEX_LOGGER: // the third page
+                    //return mFragments[FRAGMENT_INDEX_LOGGER];
                 default:
                     throw new IllegalArgumentException("Invalid section: " + position);
             }
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show total pages.
-            return 3;
+            return 2;
         }
 
         @Override
