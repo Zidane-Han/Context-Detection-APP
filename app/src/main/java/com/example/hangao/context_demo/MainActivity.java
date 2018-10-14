@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int NUMBER_OF_FRAGMENTS = 2;
-    private static final int FRAGMENT_INDEX_SETTING = 0;
-    private static final int FRAGMENT_INDEX_STATUS = 1;
+    private static final int FRAGMENT_INDEX_STATUS = 0;
+    private static final int FRAGMENT_INDEX_SETTING = 1;
     private static final int FRAGMENT_INDEX_LOGGER = 2;
 
     private GnssContainer mGpsContainer;
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                     return mFragments[FRAGMENT_INDEX_SETTING];
                 case FRAGMENT_INDEX_STATUS:
                     return mFragments[FRAGMENT_INDEX_STATUS];
-                //case FRAGMENT_INDEX_LOGGER: // the third page
-                    //return mFragments[FRAGMENT_INDEX_LOGGER];
+                case FRAGMENT_INDEX_LOGGER: // the third page
+                    return mFragments[FRAGMENT_INDEX_LOGGER];
                 default:
                     throw new IllegalArgumentException("Invalid section: " + position);
             }

@@ -1,9 +1,9 @@
 package com.example.hangao.context_demo;
 
-import android.support.v4.app.Fragment;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +13,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.hangao.context_demo.GnssContainer;
+
 import java.lang.reflect.InvocationTargetException;
-import android.widget.Button;
 
 /**
  * The UI fragment showing a set of configurable settings for the client to request GPS data.
@@ -33,7 +32,7 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_activity, container, false /* attachToRoot */);
+        View view = inflater.inflate(R.layout.frag_iodetect, container, false /* attachToRoot */);
 
         final Switch registerLocation = (Switch) view.findViewById(R.id.register_location);
         final TextView registerLocationLabel =
