@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Context-demo</string>
 
+    <string name="title_settings">Enable</string>
+    <string name="title_status">Monitor</string>
+    <string name="title_log">Collect</string>
+
     <string name="status_prn_column_label">ID</string>
     <string name="status_constellation_image_label">TYPE</string>
     <string name="status_snr_column_label">SNR</string>
@@ -9,5 +13,9 @@
     <string name="status_elevation_column_value">%1$s\u00B0</string>
     <string name="status_azimuth_column_label">Azim</string>
     <string name="status_azimuth_column_value">%1$s\u00B0</string>
+
+    // register listener string
+    <string name="location_label">Enable Location</string>
+    <string name="measurements_label">Get Raw Data</string>
 
 </resources>
