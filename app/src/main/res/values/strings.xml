@@ -12,7 +12,7 @@
     <string name="running">Running</string>
     <string name="still">Still</string>
     <string name="tilting">Tilting</string>
-    <string name="unknown_activity">Unknown activity</string>
+    <string name="unknown_activity">Unknown activity: %1$d</string>
     <string name="vehicle">In a vehicle</string>
     <string name="walking">Walking</string>
 
