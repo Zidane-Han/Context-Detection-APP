@@ -8,7 +8,7 @@ import android.location.Location;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
-import com.google.android.apps.location.gps.RawGPSapp.LoggerFragment.UIFragmentComponent;
+//import com.google.android.apps.location.gps.RawGPSapp.LoggerFragment.UIFragmentComponent;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,6 +22,7 @@ public class UiLogger implements GnssListener {
 
     public UiLogger() {}
 
+    /**
     private UIFragmentComponent mUiFragmentComponent;
 
     public synchronized UIFragmentComponent getUiFragmentComponent() {
@@ -31,6 +32,7 @@ public class UiLogger implements GnssListener {
     public synchronized void setUiFragmentComponent(UIFragmentComponent value) {
         mUiFragmentComponent = value;
     }
+     */
 
     @Override
     public void onProviderEnabled(String provider) {
