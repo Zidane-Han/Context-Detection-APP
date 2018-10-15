@@ -25,8 +25,11 @@
     <string name="status_azimuth_column_label">Azim</string>
     <string name="status_azimuth_column_value">%1$s\u00B0</string>
 
-    // register listener string
     <string name="location_label">Enable Location</string>
     <string name="measurements_label">Get Raw Data</string>
+    <string name="turn_on_location_measurement">
+    No Measurement has been received yet. Please turn on Measurement and Location in Settings.
+    </string>
+    <string name="plot_titles">CN0(dB/Hz) vs Time(s)</string>
 
 </resources>

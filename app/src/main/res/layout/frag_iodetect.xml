@@ -31,7 +31,6 @@
             android:textStyle="bold"
             android:layout_marginTop="15dp"
             android:id="@+id/register_location_label" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -55,7 +54,22 @@
             android:textStyle="bold"
             android:layout_marginTop="15dp"
             android:id="@+id/register_measurement_label" />
-
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:id="@+id/plot"
+        android:layout_weight="3">
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/analysis"
+        android:text="@string/turn_on_location_measurement"
+        android:layout_weight="1"/>
+
 
 </LinearLayout>

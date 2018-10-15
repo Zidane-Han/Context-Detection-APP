@@ -30,4 +30,6 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.code.gson:gson:2.8.1'
+
+    implementation files('libs/achartengine-1.2.0.jar')
 }
