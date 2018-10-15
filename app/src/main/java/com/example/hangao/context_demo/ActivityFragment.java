@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.location.ActivityRecognitionClient;
@@ -35,6 +36,7 @@ public class ActivityFragment extends Fragment implements SharedPreferences.OnSh
         //mContext = inflater.getContext();
         mContext = getContext();
 
+        Button mRequestActivityUpdatesButton = (Button) v.findViewById(R.id.get_activity);
         //Retrieve the ListView where we’ll display our activity data//
         ListView detectedActivitiesListView = (ListView) v.findViewById(R.id.activities_listview);
 
@@ -42,26 +44,37 @@ public class ActivityFragment extends Fragment implements SharedPreferences.OnSh
                 PreferenceManager.getDefaultSharedPreferences(mContext).getString(
                         DETECTED_ACTIVITY, ""));
 
+        // bind Button to the listener
+        mRequestActivityUpdatesButton.setOnClickListener(mButtonClickListener);
+
         //Bind the adapter to the ListView//
         mAdapter = new ActivitiesAdapter(mContext, detectedActivities);
         detectedActivitiesListView.setAdapter(mAdapter);
         mActivityRecognitionClient = new ActivityRecognitionClient(mContext);
 
+        // register listener
+        PreferenceManager.getDefaultSharedPreferences(mContext)
+                .registerOnSharedPreferenceChangeListener(this);
+        updateDetectedActivitiesList();
+
         return v;
     }
 
-    public void requestUpdatesHandler(View view) {
-        //Set the activity detection interval. I’m using 3 seconds//
-        Task<Void> task = mActivityRecognitionClient.requestActivityUpdates(
-                3000,
-                getActivityDetectionPendingIntent());
-        task.addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                updateDetectedActivitiesList();
-            }
-        });
-    }
+
+    // Button listener
+    private View.OnClickListener mButtonClickListener = new View.OnClickListener() {
+        public void onClick(View view) {
+            //Set the activity detection interval. I’m using 3 seconds//
+            Task<Void> task = mActivityRecognitionClient.requestActivityUpdates(
+                    3000, getActivityDetectionPendingIntent());
+            task.addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    updateDetectedActivitiesList();
+                }
+            });
+        }
+    };
 
     //Get a PendingIntent//
     private PendingIntent getActivityDetectionPendingIntent() {
