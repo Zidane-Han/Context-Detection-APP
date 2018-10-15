@@ -32,19 +32,20 @@ public class ActivityFragment extends Fragment implements SharedPreferences.OnSh
 
         View v = inflater.inflate(R.layout.frag_activity_main, container, false);
 
-        mContext = this;
+        //mContext = inflater.getContext();
+        mContext = getContext();
 
         //Retrieve the ListView where we’ll display our activity data//
         ListView detectedActivitiesListView = (ListView) v.findViewById(R.id.activities_listview);
 
         ArrayList<DetectedActivity> detectedActivities = ActivityIntentService.detectedActivitiesFromJson(
-                PreferenceManager.getDefaultSharedPreferences(this).getString(
+                PreferenceManager.getDefaultSharedPreferences(mContext).getString(
                         DETECTED_ACTIVITY, ""));
 
         //Bind the adapter to the ListView//
-        mAdapter = new ActivitiesAdapter(this, detectedActivities);
+        mAdapter = new ActivitiesAdapter(mContext, detectedActivities);
         detectedActivitiesListView.setAdapter(mAdapter);
-        mActivityRecognitionClient = new ActivityRecognitionClient(this);
+        mActivityRecognitionClient = new ActivityRecognitionClient(mContext);
 
         return v;
     }
@@ -65,8 +66,8 @@ public class ActivityFragment extends Fragment implements SharedPreferences.OnSh
     //Get a PendingIntent//
     private PendingIntent getActivityDetectionPendingIntent() {
         //Send the activity data to our DetectedActivitiesIntentService class//
-        Intent intent = new Intent(this, ActivityIntentService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(mContext, ActivityIntentService.class);
+        return PendingIntent.getService(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     }
 
