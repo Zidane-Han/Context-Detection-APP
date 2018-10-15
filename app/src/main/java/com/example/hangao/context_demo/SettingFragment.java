@@ -92,7 +92,7 @@ public class SettingFragment extends Fragment {
     private DataSetManager mDataSetManager;
     private XYMultipleSeriesRenderer mCurrentRenderer;
     private LinearLayout mLayout;
-    private int mCurrentTab = 0;
+    private int mCurrentTab = 0; // 0-6: all, GPS, SBAS, GLONASS, QZSS, BEIDOU, GALILEO
 
 
 
@@ -168,10 +168,18 @@ public class SettingFragment extends Fragment {
                 = new DataSetManager(NUMBER_OF_TABS, NUMBER_OF_CONSTELLATIONS, getContext(), mColorMap);
 
         // Set up the Graph View
-        mCurrentRenderer = mDataSetManager.getRenderer(mCurrentTab, DATA_SET_INDEX_ALL);
-        XYMultipleSeriesDataset currentDataSet
+        XYMultipleSeriesRenderer renderer
+                = mDataSetManager.getRenderer(mCurrentTab, DATA_SET_INDEX_ALL);
+        XYMultipleSeriesDataset dataSet
                 = mDataSetManager.getDataSet(mCurrentTab, DATA_SET_INDEX_ALL);
-        mChartView = ChartFactory.getLineChartView(getContext(), currentDataSet, mCurrentRenderer);
+        if (mLastTimeReceivedSeconds > TIME_INTERVAL_SECONDS) {
+            renderer.setXAxisMax(mLastTimeReceivedSeconds);
+            renderer.setXAxisMin(mLastTimeReceivedSeconds - TIME_INTERVAL_SECONDS);
+        }
+        mCurrentRenderer = renderer;
+        mChartView = ChartFactory.getLineChartView(getContext(), dataSet, renderer);
+
+        // update layout
         mAnalysisView = view.findViewById(R.id.analysis);
         mAnalysisView.setTextColor(Color.BLACK);
         mLayout = view.findViewById(R.id.plot);
@@ -187,7 +195,7 @@ public class SettingFragment extends Fragment {
 
     /**
      *  Updates the CN0 versus Time plot data from a {@link GnssMeasurement}
-     *
+     */
     protected void updateCnoTab(GnssMeasurementsEvent event) {
         long timeInSeconds =
                 TimeUnit.NANOSECONDS.toSeconds(event.getClock().getTimeNanos());
@@ -264,7 +272,7 @@ public class SettingFragment extends Fragment {
         }
 
         mChartView.invalidate();
-    } */
+    }
 
     private List<GnssMeasurement> sortByCarrierToNoiseRatio(List<GnssMeasurement> measurements) {
         Collections.sort(
