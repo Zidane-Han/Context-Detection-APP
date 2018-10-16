@@ -52,7 +52,7 @@ public class SettingFragment extends Fragment {
     private GnssContainer mGpsContainer;
 
     private LocationManager mLocManager;
-    private GnssMeasurementsEvent.Callback mGnssMeasurementListener;
+    //private GnssMeasurementsEvent.Callback mGnssMeasurementListener;
 
     public void setGpsContainer(GnssContainer value) {
         mGpsContainer = value;
@@ -200,15 +200,14 @@ public class SettingFragment extends Fragment {
     }
 
 
-    // GNSS measurement listener (problems with here)
+    // GNSS measurement listener
     private void addGnssMeasurementListerner() {
-        mGnssMeasurementListener = new GnssMeasurementsEvent.Callback() {
+        GnssMeasurementsEvent.Callback mGnssMeasurementListener = new GnssMeasurementsEvent.Callback() {
 
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent event) {
                 updateCnoTab(event);
             }
-
         };
 
         try{
