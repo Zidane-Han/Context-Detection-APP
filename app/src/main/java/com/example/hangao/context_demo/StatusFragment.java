@@ -123,8 +123,6 @@ public class StatusFragment extends Fragment {
                 }
 
                 mAdapter.notifyDataSetChanged();
-
-
             }
         };
 
@@ -133,8 +131,6 @@ public class StatusFragment extends Fragment {
         } catch (SecurityException e){
             setStarted(false);
         }
-
-
     }
 
 

@@ -7,7 +7,6 @@ import android.location.GnssMeasurement;
 import android.location.GnssMeasurementsEvent;
 import android.location.GnssStatus;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
@@ -51,6 +50,9 @@ public class SettingFragment extends Fragment {
 
     public static final String TAG = ":SettingsFragment";
     private GnssContainer mGpsContainer;
+
+    private LocationManager mLocManager;
+    private GnssMeasurementsEvent.Callback mGnssMeasurementListener;
 
     public void setGpsContainer(GnssContainer value) {
         mGpsContainer = value;
@@ -112,7 +114,6 @@ public class SettingFragment extends Fragment {
 
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                         if (isChecked) {
                             mGpsContainer.registerLocation();
                             mGpsContainer.registerGnssStatus();
@@ -167,6 +168,7 @@ public class SettingFragment extends Fragment {
         mDataSetManager
                 = new DataSetManager(NUMBER_OF_TABS, NUMBER_OF_CONSTELLATIONS, getContext(), mColorMap);
 
+
         // Set up the Graph View
         XYMultipleSeriesRenderer renderer
                 = mDataSetManager.getRenderer(mCurrentTab, DATA_SET_INDEX_ALL);
@@ -185,6 +187,10 @@ public class SettingFragment extends Fragment {
         mLayout = view.findViewById(R.id.plot);
         mLayout.addView(mChartView);
 
+        // set the listener for the updated GNSS information
+        mLocManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        addGnssMeasurementListerner();
+
         return view;
     }
 
@@ -192,6 +198,26 @@ public class SettingFragment extends Fragment {
         Log.e(TAG, errorMessage, e);
         Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
     }
+
+
+    // GNSS measurement listener (problems with here)
+    private void addGnssMeasurementListerner() {
+        mGnssMeasurementListener = new GnssMeasurementsEvent.Callback() {
+
+            @Override
+            public void onGnssMeasurementsReceived(GnssMeasurementsEvent event) {
+                updateCnoTab(event);
+            }
+
+        };
+
+        try{
+            mLocManager.registerGnssMeasurementsCallback(mGnssMeasurementListener);
+        } catch (SecurityException e) {
+            System.out.println("Security authorization");
+        }
+    }
+
 
     /**
      *  Updates the CN0 versus Time plot data from a {@link GnssMeasurement}
