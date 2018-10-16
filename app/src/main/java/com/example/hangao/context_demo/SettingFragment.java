@@ -250,8 +250,9 @@ public class SettingFragment extends Fragment {
                             + measurements.get(3).getCn0DbHz())
                             / NUMBER_OF_STRONGEST_SATELLITES;
         }
-        builder.append(getString(R.string.history_average_hint,
-                sDataFormat.format(mAverageCn0) + "\n"));
+
+        builder.append(getString(R.string.satellite_number_sum_hint,
+                measurements.size()) + "\n");
         builder.append(getString(R.string.current_average_hint,
                 sDataFormat.format(currentAverage) + "\n"));
         for (int i = 0; i < NUMBER_OF_STRONGEST_SATELLITES && i < measurements.size(); i++) {
@@ -271,7 +272,7 @@ public class SettingFragment extends Fragment {
                     end,
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-        builder.append(getString(R.string.satellite_number_sum_hint, measurements.size()));
+
         mAnalysisView.setText(builder);
 
         // Adding incoming data into Dataset
