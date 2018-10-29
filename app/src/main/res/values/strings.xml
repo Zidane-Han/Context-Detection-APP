@@ -1,9 +1,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Context-demo</string>
 
-    <string name="title_settings">Enable</string>
-    <string name="title_status">Monitor</string>
-    <string name="title_log">Collect</string>
+    <string name="title_activity">Activity</string>
+    <string name="title_enir">Environment</string>
+    <string name="title_sate">Satellite</string>
 
     <string name="track">Track Activity</string>
     <string name="percentage">%1$d%%</string>

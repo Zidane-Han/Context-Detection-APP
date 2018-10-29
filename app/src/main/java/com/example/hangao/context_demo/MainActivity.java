@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     };
     private static final int NUMBER_OF_FRAGMENTS = 3;
     private static final int FRAGMENT_INDEX_ACTIVITY = 0;
-    private static final int FRAGMENT_INDEX_STATUS = 1;
-    private static final int FRAGMENT_INDEX_SETTING = 2;
+    private static final int FRAGMENT_INDEX_SETTING = 1;
+    private static final int FRAGMENT_INDEX_STATUS = 2;
 
 
     private GnssContainer mGpsContainer;
@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
             Locale locale = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_settings).toUpperCase(locale);
+                    return getString(R.string.title_activity).toUpperCase(locale);
                 case 1:
-                    return getString(R.string.title_status).toUpperCase(locale);
+                    return getString(R.string.title_enir).toUpperCase(locale);
                 case 2:
-                    return getString(R.string.title_log).toUpperCase(locale);
+                    return getString(R.string.title_sate).toUpperCase(locale);
                 default:
                     return super.getPageTitle(position);
             }
