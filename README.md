@@ -1,5 +1,5 @@
 # Context Detection Android Application
-The context detection application is developed for UCL undergraduate module. It demonstates how activity and environment can be inferred from smartphone sensor measurements.
+The context detection application is developed for UCL undergraduate module CEGE0095. It demonstates how activity and environment can be inferred from smartphone sensor measurements.
 
 This source code is supplied as an Android Studio project that can be built and run with Android Studio.
 

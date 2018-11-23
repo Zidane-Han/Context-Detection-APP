@@ -88,6 +88,7 @@ public class SettingFragment extends Fragment {
     /** Total number of {@link GnssMeasurementsEvent} has been recieved*/
     private int mMeasurementCount = 0;
     private double mInitialTimeSeconds = -1;
+    private TextView mEnvironmentDetect;
     private TextView mAnalysisView;
     private double mLastTimeReceivedSeconds = 0;
     private final ColorMap mColorMap = new ColorMap();
@@ -182,6 +183,8 @@ public class SettingFragment extends Fragment {
         mChartView = ChartFactory.getLineChartView(getContext(), dataSet, renderer);
 
         // update layout
+        mEnvironmentDetect = view.findViewById(R.id.environdetect);
+        mEnvironmentDetect.setTextColor(Color.BLACK);
         mAnalysisView = view.findViewById(R.id.analysis);
         mAnalysisView.setTextColor(Color.BLACK);
         mLayout = view.findViewById(R.id.plot);
@@ -274,8 +277,9 @@ public class SettingFragment extends Fragment {
 
         mAnalysisView.setText(builder);
 
-        // Adding incoming data into Dataset
+        // Adding incoming data into Dataset && update metrics
         mLastTimeReceivedSeconds = timeInSeconds - mInitialTimeSeconds;
+        double mCNR25 = 0;
         for (GnssMeasurement measurement : measurements) {
             int constellationType = measurement.getConstellationType();
             int svID = measurement.getSvid();
@@ -287,7 +291,23 @@ public class SettingFragment extends Fragment {
                         mLastTimeReceivedSeconds,
                         measurement.getCn0DbHz());
             }
+
+            // update CNR25 metrics
+            if ((constellationType == GnssStatus.CONSTELLATION_GPS || constellationType == GnssStatus.CONSTELLATION_GLONASS) && measurement.getCn0DbHz() >= 25) {
+                mCNR25 = mCNR25 + measurement.getCn0DbHz();
+            }
+
         }
+
+        // TODO set prediction results based on metrics
+        if (mCNR25 >= 200) {
+            mEnvironmentDetect.setText("Environment: Outdoor");
+        } else if (mCNR25 <= 100) {
+            mEnvironmentDetect.setText("Environment: Indoor");
+        } else {
+            mEnvironmentDetect.setText("Environment: Intermediate");
+        }
+
 
         mDataSetManager.fillInDiscontinuity(CN0_TAB, mLastTimeReceivedSeconds);
 
