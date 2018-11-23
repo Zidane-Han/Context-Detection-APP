@@ -8,8 +8,8 @@ This source code is supplied as an Android Studio project that can be built and 
 
 ## Reference material
 Further details regarding to the algorithms, please refer to the following publications:
-http://discovery.ucl.ac.uk/10044245/
-http://discovery.ucl.ac.uk/1540225/
+Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone (http://discovery.ucl.ac.uk/10044245/)
+Context Determination for Adaptive Navigation using Multiple Sensors on a Smartphone (http://discovery.ucl.ac.uk/1540225/)
 
 ## Contact
 For any suggestions and further information, please email han.gao.zidane@gmail.com.
