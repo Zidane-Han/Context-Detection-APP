@@ -127,6 +127,7 @@ public class SettingFragment extends Fragment {
                     }
                 });
 
+        /*
         final Switch registerMeasurements = (Switch) view.findViewById(R.id.register_measurements);
         final TextView registerMeasurementsLabel =
                 (TextView) view.findViewById(R.id.register_measurement_label);
@@ -148,7 +149,7 @@ public class SettingFragment extends Fragment {
                         }
                     }
                 });
-
+        */
 
         java.lang.reflect.Method method;
         LocationManager locationManager = mGpsContainer.getLocationManager();
