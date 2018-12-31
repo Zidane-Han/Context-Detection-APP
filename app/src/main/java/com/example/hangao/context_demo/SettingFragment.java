@@ -127,30 +127,6 @@ public class SettingFragment extends Fragment {
                     }
                 });
 
-        /*
-        final Switch registerMeasurements = (Switch) view.findViewById(R.id.register_measurements);
-        final TextView registerMeasurementsLabel =
-                (TextView) view.findViewById(R.id.register_measurement_label);
-        //set the switch to OFF
-        registerMeasurements.setChecked(false);
-        registerMeasurementsLabel.setText("Switch is OFF");
-        registerMeasurements.setOnCheckedChangeListener(
-                new OnCheckedChangeListener() {
-
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                        if (isChecked) {
-                            mGpsContainer.registerMeasurements();
-                            registerMeasurementsLabel.setText("Switch is ON");
-                        } else {
-                            mGpsContainer.unregisterMeasurements();
-                            registerMeasurementsLabel.setText("Switch is OFF");
-                        }
-                    }
-                });
-        */
-
         java.lang.reflect.Method method;
         LocationManager locationManager = mGpsContainer.getLocationManager();
         try {
