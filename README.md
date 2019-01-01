@@ -12,7 +12,9 @@ https://github.com/Zidane-Han/Context-Detection-APP/blob/master/user%20instructi
 
 ## Installation
 The software can be installed by either source code or from .apk file directly.
+
 The apk file can be downloaded from the following folder where the previous versions are kept as well.
+
 https://github.com/Zidane-Han/Context-Detection-APP/tree/master/apk
 
 ## Reference material
