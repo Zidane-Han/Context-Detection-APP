@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
         ActivityFragment activityFragment = new ActivityFragment();
         mFragments[FRAGMENT_INDEX_ACTIVITY] = activityFragment;
 
-        SettingFragment settingsFragment = new SettingFragment();
-        settingsFragment.setGpsContainer(mGpsContainer);
-        mFragments[FRAGMENT_INDEX_SETTING] = settingsFragment;
+        EnvnFragment envnFragment = new EnvnFragment();
+        envnFragment.setGpsContainer(mGpsContainer);
+        mFragments[FRAGMENT_INDEX_SETTING] = envnFragment;
 
         StatusFragment statusFragment = new StatusFragment();
         mFragments[FRAGMENT_INDEX_STATUS] = statusFragment;

@@ -45,15 +45,18 @@ import org.achartengine.util.MathHelper;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationReal;
+import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixture;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixtureFactory;
+import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussian;
+import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianFactory;
 
 /**
  ** A plot fragment to show cn0 of visible satellite signals and environment detection.
  */
-public class SettingFragment extends Fragment {
+public class EnvnFragment extends Fragment {
 
-    public static final String TAG = ":SettingsFragment";
+    public static final String TAG = ":EnvnFragment";
     private GnssContainer mGpsContainer;
 
     private LocationManager mLocManager;
@@ -104,8 +107,6 @@ public class SettingFragment extends Fragment {
 
     private Hmm HMMmodel;
     private List<ObservationReal> Sequences = new ArrayList<>();
-
-
 
 
     @Override
@@ -263,6 +264,7 @@ public class SettingFragment extends Fragment {
         int length = status.getSatelliteCount();
         int mSvId = 0;
         int mTempConstellation;
+        double[] mObsv;
 
         while (mSvId < length) {
             mTempConstellation = status.getConstellationType(mSvId);
