@@ -28,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +43,17 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.util.MathHelper;
+
+import be.ac.ulg.montefiore.run.jahmm.Hmm;
+import be.ac.ulg.montefiore.run.jahmm.Observation;
+import be.ac.ulg.montefiore.run.jahmm.ObservationInteger;
+import be.ac.ulg.montefiore.run.jahmm.ObservationReal;
+import be.ac.ulg.montefiore.run.jahmm.OpdfGaussian;
+import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianFactory;
+import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixture;
+import be.ac.ulg.montefiore.run.jahmm.OpdfIntegerFactory;
+import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussian;
+import be.ac.ulg.montefiore.run.jahmm.ViterbiCalculator;
 
 /**
  ** A plot fragment to show cn0 of visible satellite signals and environment detection.
@@ -96,6 +108,10 @@ public class SettingFragment extends Fragment {
     private XYMultipleSeriesRenderer mCurrentRenderer;
     private LinearLayout mLayout;
     private int mCurrentTab = 0; // 0-6: all, GPS, SBAS, GLONASS, QZSS, BEIDOU, GALILEO
+
+    private Hmm HMMmodel;
+    private List<ObservationReal> Sequences = new ArrayList<>();
+
 
 
 
@@ -182,11 +198,13 @@ public class SettingFragment extends Fragment {
 
     // GNSS measurement listener
     private void addGnssMeasurementListerner() {
+        HMMmodel = HMMinitial();
+
         GnssMeasurementsEvent.Callback mGnssMeasurementListener = new GnssMeasurementsEvent.Callback() {
 
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent event) {
-                updateCnoTab(event);
+                updateCnoTab(event, HMMmodel);
             }
         };
 
@@ -197,11 +215,39 @@ public class SettingFragment extends Fragment {
         }
     }
 
+    private Hmm<ObservationReal> HMMinitial() {
+        // 0 -- indoor; 1 -- intermediate; 2 -- outdoor
+        Hmm<ObservationReal> hmm = new Hmm<>(3, new OpdfGaussianFactory());
+
+        // initial probability
+        hmm.setPi(0, 0.25);
+        hmm.setPi(1, 0.5);
+        hmm.setPi(2, 0.25);
+
+        // transition probability
+        hmm.setAij(0, 0, 0.66);
+        hmm.setAij(0, 1, 0.33);
+        hmm.setAij(0, 2, 0);
+        hmm.setAij(1, 0, 0.33);
+        hmm.setAij(1, 1, 0.33);
+        hmm.setAij(1, 2, 0.33);
+        hmm.setAij(2, 0, 0);
+        hmm.setAij(2, 1, 0.33);
+        hmm.setAij(2, 2, 0.66);
+
+        // emission probability
+        hmm.setOpdf(0, new OpdfGaussian(50, 2500));
+        hmm.setOpdf(1, new OpdfGaussian(150, 625));
+        hmm.setOpdf(2, new OpdfGaussian(350, 5000));
+
+        return hmm;
+    }
+
 
     /**
      *  Updates the CN0 versus Time plot data from a {@link GnssMeasurement}
      */
-    protected void updateCnoTab(GnssMeasurementsEvent event) {
+    protected void updateCnoTab(GnssMeasurementsEvent event, Hmm HMMmodel) {
         long timeInSeconds =
                 TimeUnit.NANOSECONDS.toSeconds(event.getClock().getTimeNanos());
         if (mInitialTimeSeconds < 0) {
@@ -257,6 +303,7 @@ public class SettingFragment extends Fragment {
         // Adding incoming data into Dataset && update metrics
         mLastTimeReceivedSeconds = timeInSeconds - mInitialTimeSeconds;
         double mCNR25 = 0;
+        int mNUM25 = 0;
         for (GnssMeasurement measurement : measurements) {
             int constellationType = measurement.getConstellationType();
             int svID = measurement.getSvid();
@@ -272,19 +319,32 @@ public class SettingFragment extends Fragment {
             // update CNR25 metrics
             if ((constellationType == GnssStatus.CONSTELLATION_GPS || constellationType == GnssStatus.CONSTELLATION_GLONASS) && measurement.getCn0DbHz() >= 25) {
                 mCNR25 = mCNR25 + measurement.getCn0DbHz();
+                mNUM25 = mNUM25 + 1;
             }
-
         }
 
-        // TODO set prediction results based on metrics
-        if (mCNR25 >= 200) {
-            mEnvironmentDetect.setText("Environment: Outdoor");
-        } else if (mCNR25 <= 100) {
-            mEnvironmentDetect.setText("Environment: Indoor");
-        } else {
-            mEnvironmentDetect.setText("Environment: Intermediate");
+        Sequences.add(new ObservationReal(mCNR25));
+        // cut the length of observations
+        if (Sequences.size() > 5) {
+            Sequences = Sequences.subList(Sequences.size()-5, Sequences.size());
         }
 
+
+        int[] state = HMMmodel.mostLikelyStateSequence(Sequences);
+
+        Log.d(TAG, Integer.toString(state.length));
+
+        switch (state[state.length - 1]) {
+            case 0:
+                mEnvironmentDetect.setText("Environment: Indoor");
+                break;
+            case 1:
+                mEnvironmentDetect.setText("Environment: Intermediate");
+                break;
+            case 2:
+                mEnvironmentDetect.setText("Environment: Outdoor");
+                break;
+        }
 
         mDataSetManager.fillInDiscontinuity(CN0_TAB, mLastTimeReceivedSeconds);
 
