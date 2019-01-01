@@ -28,7 +28,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -45,15 +44,9 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.util.MathHelper;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
-import be.ac.ulg.montefiore.run.jahmm.Observation;
-import be.ac.ulg.montefiore.run.jahmm.ObservationInteger;
 import be.ac.ulg.montefiore.run.jahmm.ObservationReal;
-import be.ac.ulg.montefiore.run.jahmm.OpdfGaussian;
-import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianFactory;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixture;
-import be.ac.ulg.montefiore.run.jahmm.OpdfIntegerFactory;
-import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussian;
-import be.ac.ulg.montefiore.run.jahmm.ViterbiCalculator;
+import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixtureFactory;
 
 /**
  ** A plot fragment to show cn0 of visible satellite signals and environment detection.
@@ -200,16 +193,24 @@ public class SettingFragment extends Fragment {
     private void addGnssMeasurementListerner() {
         HMMmodel = HMMinitial();
 
+        GnssStatus.Callback mGnssStatusListener = new GnssStatus.Callback() {
+            @Override
+            public void onSatelliteStatusChanged(GnssStatus status) {
+                updateEnvironment(status, HMMmodel);
+            }
+        };
+
         GnssMeasurementsEvent.Callback mGnssMeasurementListener = new GnssMeasurementsEvent.Callback() {
 
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent event) {
-                updateCnoTab(event, HMMmodel);
+                updateCnoTab(event);
             }
         };
 
         try{
             mLocManager.registerGnssMeasurementsCallback(mGnssMeasurementListener);
+            mLocManager.registerGnssStatusCallback(mGnssStatusListener);
         } catch (SecurityException e) {
             System.out.println("Security authorization");
         }
@@ -217,7 +218,7 @@ public class SettingFragment extends Fragment {
 
     private Hmm<ObservationReal> HMMinitial() {
         // 0 -- indoor; 1 -- intermediate; 2 -- outdoor
-        Hmm<ObservationReal> hmm = new Hmm<>(3, new OpdfGaussianFactory());
+        Hmm<ObservationReal> hmm = new Hmm<>(3, new OpdfGaussianMixtureFactory(2));
 
         // initial probability
         hmm.setPi(0, 0.25);
@@ -236,18 +237,71 @@ public class SettingFragment extends Fragment {
         hmm.setAij(2, 2, 0.66);
 
         // emission probability
-        hmm.setOpdf(0, new OpdfGaussian(50, 2500));
-        hmm.setOpdf(1, new OpdfGaussian(150, 625));
-        hmm.setOpdf(2, new OpdfGaussian(350, 5000));
+        double[] means_indoor = {88.95, 88.95};
+        double[] means_mediate = {142.55, 142.55};
+        double[] means_outdoor = {242.08, 607.35};
+
+        double[] variances_indoor = {1025.37, 1025.37};
+        double[] variances_mediate = {625, 625};
+        double[] variances_outdoor = {2697.4, 5218.4};
+
+        double[] proportion = {0.5, 0.5};
+
+        hmm.setOpdf(0, new OpdfGaussianMixture(means_indoor, variances_indoor, proportion));
+        hmm.setOpdf(1, new OpdfGaussianMixture(means_mediate, variances_mediate, proportion));
+        hmm.setOpdf(2, new OpdfGaussianMixture(means_outdoor, variances_outdoor, proportion));
 
         return hmm;
+    }
+
+    /**
+     * update environment detection results
+     */
+    protected void updateEnvironment(GnssStatus status, Hmm HMMmodel) {
+        double mCNR25 = 0;
+        int mNUM25 = 0;
+        int length = status.getSatelliteCount();
+        int mSvId = 0;
+        int mTempConstellation;
+
+        while (mSvId < length) {
+            mTempConstellation = status.getConstellationType(mSvId);
+
+            if ((mTempConstellation == 1 || mTempConstellation == 3) && status.getCn0DbHz(mSvId) >= 25) {
+                mCNR25 = mCNR25 + status.getCn0DbHz(mSvId);
+                mNUM25++;
+            }
+            mSvId++;
+        }
+
+        // environment detection
+        Sequences.add(new ObservationReal(mCNR25));
+        // cut the length of observations
+        if (Sequences.size() > 5) {
+            Sequences = Sequences.subList(Sequences.size()-5, Sequences.size());
+        }
+
+
+        int[] state = HMMmodel.mostLikelyStateSequence(Sequences);
+
+        switch (state[state.length - 1]) {
+            case 0:
+                mEnvironmentDetect.setText("Environment: Indoor");
+                break;
+            case 1:
+                mEnvironmentDetect.setText("Environment: Intermediate");
+                break;
+            case 2:
+                mEnvironmentDetect.setText("Environment: Outdoor");
+                break;
+        }
     }
 
 
     /**
      *  Updates the CN0 versus Time plot data from a {@link GnssMeasurement}
      */
-    protected void updateCnoTab(GnssMeasurementsEvent event, Hmm HMMmodel) {
+    protected void updateCnoTab(GnssMeasurementsEvent event) {
         long timeInSeconds =
                 TimeUnit.NANOSECONDS.toSeconds(event.getClock().getTimeNanos());
         if (mInitialTimeSeconds < 0) {
@@ -321,29 +375,6 @@ public class SettingFragment extends Fragment {
                 mCNR25 = mCNR25 + measurement.getCn0DbHz();
                 mNUM25 = mNUM25 + 1;
             }
-        }
-
-        Sequences.add(new ObservationReal(mCNR25));
-        // cut the length of observations
-        if (Sequences.size() > 5) {
-            Sequences = Sequences.subList(Sequences.size()-5, Sequences.size());
-        }
-
-
-        int[] state = HMMmodel.mostLikelyStateSequence(Sequences);
-
-        Log.d(TAG, Integer.toString(state.length));
-
-        switch (state[state.length - 1]) {
-            case 0:
-                mEnvironmentDetect.setText("Environment: Indoor");
-                break;
-            case 1:
-                mEnvironmentDetect.setText("Environment: Intermediate");
-                break;
-            case 2:
-                mEnvironmentDetect.setText("Environment: Outdoor");
-                break;
         }
 
         mDataSetManager.fillInDiscontinuity(CN0_TAB, mLastTimeReceivedSeconds);
