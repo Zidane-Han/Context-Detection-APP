@@ -9,7 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
-import android.os.SystemClock;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

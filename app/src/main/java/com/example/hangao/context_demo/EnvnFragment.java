@@ -1,3 +1,9 @@
+/*
+An implementation of GMM-HMM under JaHMM framework can be found:
+https://www.programcreek.com/java-api-examples/?code=TengfeiWang/Jahmm/Jahmm-master/src/be/ac/ulg/montefiore/run/jahmm/apps/cli/BWActionHandler.java#
+Some privacy problem on accessing the variable of ObservationVector class.
+ */
+
 package com.example.hangao.context_demo;
 
 import android.content.Context;
@@ -45,11 +51,8 @@ import org.achartengine.util.MathHelper;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationReal;
-import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixture;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixtureFactory;
-import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussian;
-import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianFactory;
 
 /**
  ** A plot fragment to show cn0 of visible satellite signals and environment detection.

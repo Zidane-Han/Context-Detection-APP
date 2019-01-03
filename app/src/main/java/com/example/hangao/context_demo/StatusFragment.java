@@ -30,7 +30,6 @@ public class StatusFragment extends Fragment {
     private static final int COLUMN_COUNT = 5;
 
     private LocationManager mLocationManager;
-    private GnssStatus.Callback mGnssStatusListener;
 
     private Resources mRes;
 
@@ -77,7 +76,7 @@ public class StatusFragment extends Fragment {
     }
 
     private void addGnssStatusListener() {
-        mGnssStatusListener = new GnssStatus.Callback() {
+        GnssStatus.Callback mGnssStatusListener = new GnssStatus.Callback() {
 
             @Override
             public void onSatelliteStatusChanged(GnssStatus status) {
@@ -86,7 +85,7 @@ public class StatusFragment extends Fragment {
                 mSnrCn0Title = mRes.getString(R.string.status_cn0_column_label);
 
                 if (mPrns == null) {
-                    /**
+                    /*
                      * We need to allocate arrays big enough so we don't overflow them.  Per
                      * https://developer.android.com/reference/android/location/GnssStatus.html#getSvid(int)
                      * 255 should be enough to contain all known satellites world-wide.
@@ -139,70 +138,12 @@ public class StatusFragment extends Fragment {
             if (navigating) {
 
             } else {
-                /**
-                 mLatitudeView.setText(EMPTY_LAT_LONG);
-                 mLongitudeView.setText(EMPTY_LAT_LONG);
-                 mFixTime = 0;
-                 updateFixTime();
-                 mTTFFView.setText("");
-                 mAltitudeView.setText("");
-                 mAccuracyView.setText("");
-                 mSpeedView.setText("");
-                 mBearingView.setText("");
-                 */
                 mSvCount = 0;
                 mAdapter.notifyDataSetChanged();
             }
             mNavigating = navigating;
         }
     }
-
-    /**
-     public void onSatelliteStatusChanged(GnssStatus status) {
-     setStarted(true);
-
-     mSnrCn0Title = mRes.getString(R.string.status_cn0_column_label);
-
-     if (mPrns == null) {
-     /**
-     * We need to allocate arrays big enough so we don't overflow them.  Per
-     * https://developer.android.com/reference/android/location/GnssStatus.html#getSvid(int)
-     * 255 should be enough to contain all known satellites world-wide.
-
-     final int MAX_LENGTH = 255;
-     mPrns = new int[MAX_LENGTH];
-     mSnrCn0s = new float[MAX_LENGTH];
-     mSvElevations = new float[MAX_LENGTH];
-     mSvAzimuths = new float[MAX_LENGTH];
-     mConstellationType = new int[MAX_LENGTH];
-     mHasEphemeris = new boolean[MAX_LENGTH];
-     mHasAlmanac = new boolean[MAX_LENGTH];
-     mUsedInFix = new boolean[MAX_LENGTH];
-     }
-
-     final int length = status.getSatelliteCount();
-     mSvCount = 0;
-     mUsedInFixCount = 0;
-     while (mSvCount < length) {
-     int prn = status.getSvid(mSvCount);
-     mPrns[mSvCount] = prn;
-     mConstellationType[mSvCount] = status.getConstellationType(mSvCount);
-     mSnrCn0s[mSvCount] = status.getCn0DbHz(mSvCount);
-     mSvElevations[mSvCount] = status.getElevationDegrees(mSvCount);
-     mSvAzimuths[mSvCount] = status.getAzimuthDegrees(mSvCount);
-     mHasEphemeris[mSvCount] = status.hasEphemerisData(mSvCount);
-     mHasAlmanac[mSvCount] = status.hasAlmanacData(mSvCount);
-     mUsedInFix[mSvCount] = status.usedInFix(mSvCount);
-     if (status.usedInFix(mSvCount)) {
-     mUsedInFixCount++;
-     }
-
-     mSvCount++;
-     }
-
-     mAdapter.notifyDataSetChanged();
-     }
-     */
 
     private class SvGridAdapter extends BaseAdapter {
 

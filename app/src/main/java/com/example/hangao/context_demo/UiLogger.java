@@ -8,8 +8,6 @@ import android.location.Location;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
-//import com.google.android.apps.location.gps.RawGPSapp.LoggerFragment.UIFragmentComponent;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A class representing a UI logger for the application. Its responsibility is show information in
@@ -17,7 +15,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class UiLogger implements GnssListener {
 
-    private static final long EARTH_RADIUS_METERS = 6371000;
     private static final int USED_COLOR = Color.rgb(0x4a, 0x5f, 0x70);
 
     public UiLogger() {}

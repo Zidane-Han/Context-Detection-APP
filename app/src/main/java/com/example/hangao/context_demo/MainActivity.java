@@ -28,10 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int FRAGMENT_INDEX_SETTING = 1;
     private static final int FRAGMENT_INDEX_STATUS = 2;
 
-
-    private GnssContainer mGpsContainer;
-    private UiLogger mUiLogger;
-    //private FileLogger mFileLogger;
     private Fragment[] mFragments;
 
     @Override
@@ -93,10 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupFragments() {
-        mUiLogger = new UiLogger();
-        //mFileLogger = new FileLogger(getApplicationContext());
-        //mGpsContainer = new GnssContainer(getApplicationContext(), mUiLogger, mFileLogger);
-        mGpsContainer = new GnssContainer(getApplicationContext(), mUiLogger);
+        UiLogger mUiLogger = new UiLogger();
+        GnssContainer mGpsContainer = new GnssContainer(getApplicationContext(), mUiLogger);
 
         mFragments = new Fragment[NUMBER_OF_FRAGMENTS];
 
@@ -109,11 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         StatusFragment statusFragment = new StatusFragment();
         mFragments[FRAGMENT_INDEX_STATUS] = statusFragment;
-
-        //LoggerFragment loggerFragment = new LoggerFragment();
-        //loggerFragment.setUILogger(mUiLogger);
-        //loggerFragment.setFileLogger(mFileLogger);
-        //mFragments[FRAGMENT_INDEX_LOGGER] = loggerFragment;
 
         // The viewpager that will host the section contents.
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
