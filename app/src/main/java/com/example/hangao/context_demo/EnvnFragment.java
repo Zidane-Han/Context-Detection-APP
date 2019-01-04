@@ -23,14 +23,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -60,14 +56,9 @@ import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixtureFactory;
 public class EnvnFragment extends Fragment {
 
     public static final String TAG = ":EnvnFragment";
-    private GnssContainer mGpsContainer;
 
     private LocationManager mLocManager;
-    //private GnssMeasurementsEvent.Callback mGnssMeasurementListener;
 
-    public void setGpsContainer(GnssContainer value) {
-        mGpsContainer = value;
-    }
 
     /** Total number of kinds of plot tabs */
     private static final int NUMBER_OF_TABS = 1;
@@ -116,45 +107,6 @@ public class EnvnFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_iodetect, container, false /* attachToRoot */);
-
-        final Switch registerLocation = (Switch) view.findViewById(R.id.register_location);
-        final TextView registerLocationLabel =
-                (TextView) view.findViewById(R.id.register_location_label);
-        //set the switch to OFF
-        registerLocation.setChecked(false);
-        registerLocationLabel.setText("Switch is OFF");
-        registerLocation.setOnCheckedChangeListener(
-                new OnCheckedChangeListener() {
-
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            mGpsContainer.registerLocation();
-                            mGpsContainer.registerGnssStatus();
-                            registerLocationLabel.setText("Switch is ON");
-                        } else {
-                            mGpsContainer.unregisterLocation();
-                            mGpsContainer.unregisterGpsStatus();
-                            registerLocationLabel.setText("Switch is OFF");
-                        }
-                    }
-                });
-
-        java.lang.reflect.Method method;
-        LocationManager locationManager = mGpsContainer.getLocationManager();
-        try {
-            method = locationManager.getClass().getMethod("getGnssYearOfHardware");
-            int hwYear = (int) method.invoke(locationManager);
-        } catch (NoSuchMethodException e) {
-            logException("No such method exception: ", e);
-            return null;
-        } catch (IllegalAccessException e) {
-            logException("Illegal Access exception: ", e);
-            return null;
-        } catch (InvocationTargetException e) {
-            logException("Invocation Target Exception: ", e);
-            return null;
-        }
 
         mDataSetManager
                 = new DataSetManager(NUMBER_OF_TABS, NUMBER_OF_CONSTELLATIONS, getContext(), mColorMap);
@@ -267,7 +219,6 @@ public class EnvnFragment extends Fragment {
         int length = status.getSatelliteCount();
         int mSvId = 0;
         int mTempConstellation;
-        double[] mObsv;
 
         while (mSvId < length) {
             mTempConstellation = status.getConstellationType(mSvId);

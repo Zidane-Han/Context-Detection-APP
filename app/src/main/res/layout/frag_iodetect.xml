@@ -9,36 +9,12 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Switch
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/register_location"
-            android:singleLine="true"
-            android:layout_marginTop="15dp"
-            android:text="@string/location_label" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginTop="15dp"
-            android:id="@+id/register_location_label" />
-    </LinearLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/environdetect"
         android:text="@string/envirdetec"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:layout_weight="1"/>
 
     <LinearLayout

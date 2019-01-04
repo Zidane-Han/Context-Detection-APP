@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupFragments() {
-        UiLogger mUiLogger = new UiLogger();
-        GnssContainer mGpsContainer = new GnssContainer(getApplicationContext(), mUiLogger);
 
         mFragments = new Fragment[NUMBER_OF_FRAGMENTS];
 
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         mFragments[FRAGMENT_INDEX_ACTIVITY] = activityFragment;
 
         EnvnFragment envnFragment = new EnvnFragment();
-        envnFragment.setGpsContainer(mGpsContainer);
         mFragments[FRAGMENT_INDEX_SETTING] = envnFragment;
 
         StatusFragment statusFragment = new StatusFragment();
