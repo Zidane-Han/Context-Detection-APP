@@ -18,16 +18,16 @@ This source code is supplied as an Android Studio project that can be built and 
 ## System Requirement
 - Android API Level > v24
 
-## User instructor
-The instructor for using the application can be found on 
-https://github.com/Zidane-Han/Context-Detection-APP/blob/master/user%20instruction/User%20Instruction.pdf
+## User instruction
+The instruction for using the application can be found on 
+https://github.com/Zidane-Han/Context-Detection-APP/releases/
 
 ## Installation
 The software can be installed by either source code or from .apk file directly.
 
-The apk file can be downloaded from the following folder where the previous versions are kept as well.
+The apk file can be downloaded from the following link:
 
-https://github.com/Zidane-Han/Context-Detection-APP/tree/master/apk
+https://github.com/Zidane-Han/Context-Detection-APP/releases/
 
 ## Reference material
 Further details regarding to the algorithms, please refer to the following publications:
