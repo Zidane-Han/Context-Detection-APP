@@ -66,7 +66,7 @@ public class ActivityFragment extends Fragment implements SharedPreferences.OnSh
         public void onClick(View view) {
             //Set the activity detection interval. I’m using 3 seconds//
             Task<Void> task = mActivityRecognitionClient.requestActivityUpdates(
-                    3000, getActivityDetectionPendingIntent());
+                    10, getActivityDetectionPendingIntent());
             task.addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void result) {
