@@ -153,6 +153,7 @@ public class EnvnFragment extends Fragment {
             @Override
             public void onSatelliteStatusChanged(GnssStatus status) {
                 updateEnvironment(status, HMMmodel);
+                // TODO: add log
             }
         };
 
@@ -239,6 +240,8 @@ public class EnvnFragment extends Fragment {
 
 
         int[] state = HMMmodel.mostLikelyStateSequence(Sequences);
+
+        // TODO: add log
 
         switch (state[state.length - 1]) {
             case 0:
