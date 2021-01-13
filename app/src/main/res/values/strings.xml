@@ -26,7 +26,10 @@
     <string name="status_azimuth_column_value">%1$s\u00B0</string>
 
     <string name="location_label">Enable Location</string>
-    <string name="envirdetec"> Environment Detecting</string>
+    <string name="environment_unknown"> Environment Detecting</string>
+    <string name="environment_indoor"> Environment: Indoor</string>
+    <string name="environment_inter"> Environment: Intermediate</string>
+    <string name="environment_outdoor"> Environment: Outdoor</string>
     <string name="turn_on_location_measurement">
     No Measurement has been received yet. Please turn on Measurement and Location in Settings.
     </string>
