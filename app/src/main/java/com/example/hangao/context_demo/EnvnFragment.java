@@ -283,7 +283,7 @@ public class EnvnFragment extends Fragment {
         }
 
         builder.append(getString(R.string.satellite_number_sum_hint,
-                measurements.size()) + "\n");
+                validateSatlliteNum(measurements)) + "\n");
         builder.append(getString(R.string.current_average_hint,
                 sDataFormat.format(currentAverage) + "\n"));
         for (int i = 0; i < NUMBER_OF_STRONGEST_SATELLITES && i < measurements.size(); i++) {
@@ -306,26 +306,19 @@ public class EnvnFragment extends Fragment {
 
         mAnalysisView.setText(builder);
 
-        // Adding incoming data into Dataset && update metrics
+        // Adding incoming data into Dataset
         mLastTimeReceivedSeconds = timeInSeconds - mInitialTimeSeconds;
-        double mCNR25 = 0;
-        int mNUM25 = 0;
         for (GnssMeasurement measurement : measurements) {
             int constellationType = measurement.getConstellationType();
             int svID = measurement.getSvid();
-            if (constellationType != GnssStatus.CONSTELLATION_UNKNOWN) {
+            double cnrValue = measurement.getCn0DbHz();
+            if (constellationType != GnssStatus.CONSTELLATION_UNKNOWN && cnrValue > 0) {
                 mDataSetManager.addValue(
                         CN0_TAB,
                         constellationType,
                         svID,
                         mLastTimeReceivedSeconds,
                         measurement.getCn0DbHz());
-            }
-
-            // update CNR25 metrics
-            if ((constellationType == GnssStatus.CONSTELLATION_GPS || constellationType == GnssStatus.CONSTELLATION_GLONASS) && measurement.getCn0DbHz() >= 25) {
-                mCNR25 = mCNR25 + measurement.getCn0DbHz();
-                mNUM25 = mNUM25 + 1;
             }
         }
 
@@ -338,6 +331,16 @@ public class EnvnFragment extends Fragment {
         }
 
         mChartView.invalidate();
+    }
+
+    private int validateSatlliteNum(List<GnssMeasurement> measurements) {
+        int num = 0;
+        for (GnssMeasurement measurement : measurements) {
+            if (measurement.getCn0DbHz() > 0) {
+                num++;
+            }
+        }
+        return num;
     }
 
     private List<GnssMeasurement> sortByCarrierToNoiseRatio(List<GnssMeasurement> measurements) {
