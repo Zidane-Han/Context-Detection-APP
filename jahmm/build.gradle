@@ -1,0 +1,17 @@
+/*
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+ */
+
+apply plugin: 'java'
+
+dependencies {
+    implementation 'junit:junit:4.12'
+}
