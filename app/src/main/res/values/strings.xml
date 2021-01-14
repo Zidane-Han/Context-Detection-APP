@@ -26,15 +26,16 @@
     <string name="status_azimuth_column_value">%1$s\u00B0</string>
 
     <string name="location_label">Enable Location</string>
-    <string name="envirdetec"> Environment Detecting</string>
+    <string name="environment_unknown"> Environment Detecting</string>
+    <string name="environment_indoor"> Environment: Indoor</string>
+    <string name="environment_inter"> Environment: Intermediate</string>
+    <string name="environment_outdoor"> Environment: Outdoor</string>
     <string name="turn_on_location_measurement">
     No Measurement has been received yet. Please turn on Measurement and Location in Settings.
     </string>
     <string name="plot_titles">CN0(dB/Hz) vs Time(s)</string>
-    <string name="current_average_hint">Current Average Of Strongest 4 Satellites:
+    <string name="current_average_hint">Average Of Strongest 4 Satellites:
         <xliff:g id="currentAverage">%s</xliff:g></string>
-    <string name="history_average_hint">History Average of Strongest 4 Satellites:
-        <xliff:g id="historyAverage">%s</xliff:g></string>
     <string name="satellite_number_sum_hint">Total Number of Visible Satellites:
         <xliff:g id="totalNumber">%d</xliff:g></string>
 

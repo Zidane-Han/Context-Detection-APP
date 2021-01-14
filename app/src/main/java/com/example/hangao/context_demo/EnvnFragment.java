@@ -149,24 +149,16 @@ public class EnvnFragment extends Fragment {
     private void addGnssMeasurementListerner() {
         HMMmodel = HMMinitial();
 
-        GnssStatus.Callback mGnssStatusListener = new GnssStatus.Callback() {
-            @Override
-            public void onSatelliteStatusChanged(GnssStatus status) {
-                updateEnvironment(status, HMMmodel);
-            }
-        };
-
         GnssMeasurementsEvent.Callback mGnssMeasurementListener = new GnssMeasurementsEvent.Callback() {
-
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent event) {
                 updateCnoTab(event);
+                updateEnvironment(event, HMMmodel);
             }
         };
 
         try{
             mLocManager.registerGnssMeasurementsCallback(mGnssMeasurementListener);
-            mLocManager.registerGnssStatusCallback(mGnssStatusListener);
         } catch (SecurityException e) {
             System.out.println("Security authorization");
         }
@@ -183,13 +175,13 @@ public class EnvnFragment extends Fragment {
 
         // transition probability
         hmm.setAij(0, 0, 0.66);
-        hmm.setAij(0, 1, 0.33);
+        hmm.setAij(0, 1, 0.34);
         hmm.setAij(0, 2, 0);
         hmm.setAij(1, 0, 0.33);
-        hmm.setAij(1, 1, 0.33);
+        hmm.setAij(1, 1, 0.34);
         hmm.setAij(1, 2, 0.33);
         hmm.setAij(2, 0, 0);
-        hmm.setAij(2, 1, 0.33);
+        hmm.setAij(2, 1, 0.34);
         hmm.setAij(2, 2, 0.66);
 
         // emission probability
@@ -213,25 +205,26 @@ public class EnvnFragment extends Fragment {
     /**
      * update environment detection results
      */
-    protected void updateEnvironment(GnssStatus status, Hmm HMMmodel) {
-        double mCNR25 = 0;
+    protected void updateEnvironment(GnssMeasurementsEvent event, Hmm HMMmodel) {
+        double mCnr25 = 0;
         int mNUM25 = 0;
-        int length = status.getSatelliteCount();
         int mSvId = 0;
+
+        List<GnssMeasurement> measurements = new ArrayList<>(event.getMeasurements());
+
         int mTempConstellation;
-
-        while (mSvId < length) {
-            mTempConstellation = status.getConstellationType(mSvId);
-
-            if ((mTempConstellation == 1 || mTempConstellation == 3) && status.getCn0DbHz(mSvId) >= 25) {
-                mCNR25 = mCNR25 + status.getCn0DbHz(mSvId);
+        double mCnr;
+        for (int i = 0; i < measurements.size(); i++) {
+            mTempConstellation = measurements.get(i).getConstellationType();
+            mCnr = measurements.get(i).getCn0DbHz();
+            if ((mTempConstellation == 1 || mTempConstellation == 3) && mCnr >= 25) {
+                mCnr25 += mCnr;
                 mNUM25++;
             }
-            mSvId++;
         }
 
         // environment detection
-        Sequences.add(new ObservationReal(mCNR25));
+        Sequences.add(new ObservationReal(mCnr25));
         // cut the length of observations
         if (Sequences.size() > 5) {
             Sequences = Sequences.subList(Sequences.size()-5, Sequences.size());
@@ -242,13 +235,16 @@ public class EnvnFragment extends Fragment {
 
         switch (state[state.length - 1]) {
             case 0:
-                mEnvironmentDetect.setText("Environment: Indoor");
+                mEnvironmentDetect.setText(R.string.environment_indoor);
                 break;
             case 1:
-                mEnvironmentDetect.setText("Environment: Intermediate");
+                mEnvironmentDetect.setText(R.string.environment_inter);
                 break;
             case 2:
-                mEnvironmentDetect.setText("Environment: Outdoor");
+                mEnvironmentDetect.setText(R.string.environment_outdoor);
+                break;
+            default:
+                mEnvironmentDetect.setText(R.string.environment_unknown);
                 break;
         }
     }
@@ -287,7 +283,7 @@ public class EnvnFragment extends Fragment {
         }
 
         builder.append(getString(R.string.satellite_number_sum_hint,
-                measurements.size()) + "\n");
+                validateSatlliteNum(measurements)) + "\n");
         builder.append(getString(R.string.current_average_hint,
                 sDataFormat.format(currentAverage) + "\n"));
         for (int i = 0; i < NUMBER_OF_STRONGEST_SATELLITES && i < measurements.size(); i++) {
@@ -310,26 +306,19 @@ public class EnvnFragment extends Fragment {
 
         mAnalysisView.setText(builder);
 
-        // Adding incoming data into Dataset && update metrics
+        // Adding incoming data into Dataset
         mLastTimeReceivedSeconds = timeInSeconds - mInitialTimeSeconds;
-        double mCNR25 = 0;
-        int mNUM25 = 0;
         for (GnssMeasurement measurement : measurements) {
             int constellationType = measurement.getConstellationType();
             int svID = measurement.getSvid();
-            if (constellationType != GnssStatus.CONSTELLATION_UNKNOWN) {
+            double cnrValue = measurement.getCn0DbHz();
+            if (constellationType != GnssStatus.CONSTELLATION_UNKNOWN && cnrValue > 0) {
                 mDataSetManager.addValue(
                         CN0_TAB,
                         constellationType,
                         svID,
                         mLastTimeReceivedSeconds,
                         measurement.getCn0DbHz());
-            }
-
-            // update CNR25 metrics
-            if ((constellationType == GnssStatus.CONSTELLATION_GPS || constellationType == GnssStatus.CONSTELLATION_GLONASS) && measurement.getCn0DbHz() >= 25) {
-                mCNR25 = mCNR25 + measurement.getCn0DbHz();
-                mNUM25 = mNUM25 + 1;
             }
         }
 
@@ -342,6 +331,16 @@ public class EnvnFragment extends Fragment {
         }
 
         mChartView.invalidate();
+    }
+
+    private int validateSatlliteNum(List<GnssMeasurement> measurements) {
+        int num = 0;
+        for (GnssMeasurement measurement : measurements) {
+            if (measurement.getCn0DbHz() > 0) {
+                num++;
+            }
+        }
+        return num;
     }
 
     private List<GnssMeasurement> sortByCarrierToNoiseRatio(List<GnssMeasurement> measurements) {

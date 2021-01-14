@@ -10,12 +10,12 @@
     android:paddingBottom="16dp">
 
     <TextView
+        android:id="@+id/environdetect"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/environdetect"
-        android:text="@string/envirdetec"
-        android:textSize="28sp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="@string/environment_unknown"
+        android:textSize="26sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

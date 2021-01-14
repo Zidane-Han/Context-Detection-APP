@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String[] REQUIRED_PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private static final int NUMBER_OF_FRAGMENTS = 3;
+    private static final int NUMBER_OF_FRAGMENTS = 2;
     private static final int FRAGMENT_INDEX_ACTIVITY = 0;
     private static final int FRAGMENT_INDEX_SETTING = 1;
     private static final int FRAGMENT_INDEX_STATUS = 2;
@@ -55,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case FRAGMENT_INDEX_SETTING:
-                    return mFragments[FRAGMENT_INDEX_SETTING];
-                case FRAGMENT_INDEX_STATUS:
-                    return mFragments[FRAGMENT_INDEX_STATUS];
                 case FRAGMENT_INDEX_ACTIVITY:
                     return mFragments[FRAGMENT_INDEX_ACTIVITY];
+                case FRAGMENT_INDEX_SETTING:
+                    return mFragments[FRAGMENT_INDEX_SETTING];
+//                case FRAGMENT_INDEX_STATUS:
+//                    return mFragments[FRAGMENT_INDEX_STATUS];
                 default:
                     throw new IllegalArgumentException("Invalid section: " + position);
             }
@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show total pages.
-            return 3;
+            // return 3;
+            return 2;
         }
 
         @Override
@@ -80,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
                     return getString(R.string.title_activity).toUpperCase(locale);
                 case 1:
                     return getString(R.string.title_enir).toUpperCase(locale);
-                case 2:
-                    return getString(R.string.title_sate).toUpperCase(locale);
+//                case 2:
+//                    return getString(R.string.title_sate).toUpperCase(locale);
                 default:
                     return super.getPageTitle(position);
             }
@@ -98,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         EnvnFragment envnFragment = new EnvnFragment();
         mFragments[FRAGMENT_INDEX_SETTING] = envnFragment;
 
-        StatusFragment statusFragment = new StatusFragment();
-        mFragments[FRAGMENT_INDEX_STATUS] = statusFragment;
+//        StatusFragment statusFragment = new StatusFragment();
+//        mFragments[FRAGMENT_INDEX_STATUS] = statusFragment;
 
         // The viewpager that will host the section contents.
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
