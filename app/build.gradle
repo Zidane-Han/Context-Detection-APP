@@ -7,7 +7,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:support-v13:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation project(path: ':jahmm')
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -30,5 +31,4 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation files('libs/achartengine-1.2.0.jar')
-    implementation 'be.ac.ulg.montefiore.run.jahmm:jahmm:0.6.2' // Jahmm Library for HMM implementation
 }

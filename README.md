@@ -16,28 +16,24 @@ The context detection application is developed for UCL undergraduate module CEGE
 This source code is supplied as an Android Studio project that can be built and run with Android Studio.
 
 ## System Requirement
-- Android API Level > v24
+- Smartphone system: Android 8.0 or higher
 
-## User instruction
-The instruction for using the application can be found on 
-https://github.com/Zidane-Han/Context-Detection-APP/releases/
-
-## Installation
+## Installation and Instruction
 The software can be installed by either source code or from .apk file directly.
 
-The apk file can be downloaded from the following link:
+The apk file and user instruction can be downloaded from the following link:
 
 https://github.com/Zidane-Han/Context-Detection-APP/releases/
 
 ## Reference material
 Further details regarding to the algorithms, please refer to the following publications:
-- Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone (http://discovery.ucl.ac.uk/10044245/)
-- Context Determination for Adaptive Navigation using Multiple Sensors on a Smartphone (http://discovery.ucl.ac.uk/1540225/)
+- Gao, H; Groves, D; (2018) Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone. Navigation , 65 (1) pp. 99-116.  (http://discovery.ucl.ac.uk/10044245/)
+- Gao, H; Groves, PD; (2016) Context Determination for Adaptive Navigation using Multiple Sensors on a Smartphone.  ION GNSS+ 2016, pp. 742-756, Institute of Navigation (ION): Portland, OR, USA.  (http://discovery.ucl.ac.uk/1540225/)
 
 ## Contact
 For any suggestions and further information, please email han.gao.zidane@gmail.com.
 
-Welcome to any pull request for improvement.
+Pull requests are always welcome to maintain and improve the software.
 
 ## Copyright
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
