@@ -1,8 +1,3 @@
-/*
-An implementation of GMM-HMM under JaHMM framework can be found:
-https://www.programcreek.com/java-api-examples/?code=TengfeiWang/Jahmm/Jahmm-master/src/be/ac/ulg/montefiore/run/jahmm/apps/cli/BWActionHandler.java#
-Some privacy problem on accessing the variable of ObservationVector class.
- */
 
 package com.example.hangao.context_demo;
 
@@ -46,9 +41,10 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.util.MathHelper;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
-import be.ac.ulg.montefiore.run.jahmm.ObservationReal;
-import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixture;
-import be.ac.ulg.montefiore.run.jahmm.OpdfGaussianMixtureFactory;
+import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
+import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianMixture;
+import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianMixtureFactory;
+
 
 /**
  ** A plot fragment to show cn0 of visible satellite signals and environment detection.
@@ -97,10 +93,10 @@ public class EnvnFragment extends Fragment {
     private DataSetManager mDataSetManager;
     private XYMultipleSeriesRenderer mCurrentRenderer;
     private LinearLayout mLayout;
-    private int mCurrentTab = 0; // 0-6: all, GPS, SBAS, GLONASS, QZSS, BEIDOU, GALILEO
+    private int mCurrentTab = 0;
 
-    private Hmm HMMmodel;
-    private List<ObservationReal> Sequences = new ArrayList<>();
+    private Hmm<ObservationVector> HMMmodel;
+    private List<ObservationVector> Sequences = new ArrayList<>();
 
 
     @Override
@@ -164,51 +160,65 @@ public class EnvnFragment extends Fragment {
         }
     }
 
-    private Hmm<ObservationReal> HMMinitial() {
+    /**
+     * init GMM-HMM model
+     */
+    private Hmm<ObservationVector> HMMinitial() {
         // 0 -- indoor; 1 -- intermediate; 2 -- outdoor
-        Hmm<ObservationReal> hmm = new Hmm<>(3, new OpdfGaussianMixtureFactory(2));
+        Hmm<ObservationVector> gmmhmm = new Hmm<>(3, new OpdfMultiGaussianMixtureFactory(2, 2));
 
+        /*
+         * details about the parameters of GMM-HMM model, please refer to the following paper:
+         * Gao, H; Groves, D; (2018) Environmental Context Detection for Adaptive Navigation
+         * using GNSS Measurements from a Smartphone. Navigation , 65 (1) pp. 99-116.
+         */
         // initial probability
-        hmm.setPi(0, 0.25);
-        hmm.setPi(1, 0.5);
-        hmm.setPi(2, 0.25);
+        gmmhmm.setPi(0, 0.25);
+        gmmhmm.setPi(1, 0.5);
+        gmmhmm.setPi(2, 0.25);
 
         // transition probability
-        hmm.setAij(0, 0, 0.66);
-        hmm.setAij(0, 1, 0.34);
-        hmm.setAij(0, 2, 0);
-        hmm.setAij(1, 0, 0.33);
-        hmm.setAij(1, 1, 0.34);
-        hmm.setAij(1, 2, 0.33);
-        hmm.setAij(2, 0, 0);
-        hmm.setAij(2, 1, 0.34);
-        hmm.setAij(2, 2, 0.66);
+        gmmhmm.setAij(0, 0, 0.66);
+        gmmhmm.setAij(0, 1, 0.34);
+        gmmhmm.setAij(0, 2, 0);
+        gmmhmm.setAij(1, 0, 0.33);
+        gmmhmm.setAij(1, 1, 0.34);
+        gmmhmm.setAij(1, 2, 0.33);
+        gmmhmm.setAij(2, 0, 0);
+        gmmhmm.setAij(2, 1, 0.34);
+        gmmhmm.setAij(2, 2, 0.66);
 
         // emission probability
-        double[] means_indoor = {88.95, 88.95};
-        double[] means_mediate = {142.55, 142.55};
-        double[] means_outdoor = {242.08, 607.35};
+        // double[][] means = new double[nbGaussians()][dimension()];
+        double[][] means_indoor = {{3.02, 88.95}, {3.02, 88.95}};
+        double[][] means_mediate = {{4.58, 142.55}, {4.58, 142.55}};
+        double[][] means_outdoor = {{7.77, 242.08}, {17.33, 607.35}};
 
-        double[] variances_indoor = {1025.37, 1025.37};
-        double[] variances_mediate = {625, 625};
-        double[] variances_outdoor = {2697.4, 5218.4};
+        // double[][][] covariances = new double[nbGaussians()][dimension()][dimension()];
+        double[][] var0_indoor = {{1.40, 0}, {0, 1025.37}};
+        double[][][] variances_indoor = {var0_indoor, var0_indoor};
+        double[][] var0_mediate = {{1.26, 0}, {0, 625}};
+        double[][][] variances_mediate = {var0_mediate, var0_mediate};
+        double[][] var1_outdoor = {{3.25, 0}, {0, 2697.4}};
+        double[][] var2_outdoor = {{4.58, 0}, {0, 5218.4}};
+        double[][][] variances_outdoor = {var1_outdoor, var2_outdoor};
 
         double[] proportion = {0.5, 0.5};
 
-        hmm.setOpdf(0, new OpdfGaussianMixture(means_indoor, variances_indoor, proportion));
-        hmm.setOpdf(1, new OpdfGaussianMixture(means_mediate, variances_mediate, proportion));
-        hmm.setOpdf(2, new OpdfGaussianMixture(means_outdoor, variances_outdoor, proportion));
+        // public OpdfMultiGaussianMixture(double[][] means, double[][][] covariances, double[] proportions)
+        gmmhmm.setOpdf(0, new OpdfMultiGaussianMixture(means_indoor, variances_indoor, proportion));
+        gmmhmm.setOpdf(1, new OpdfMultiGaussianMixture(means_mediate, variances_mediate, proportion));
+        gmmhmm.setOpdf(2, new OpdfMultiGaussianMixture(means_outdoor, variances_outdoor, proportion));
 
-        return hmm;
+        return gmmhmm;
     }
 
     /**
      * update environment detection results
      */
-    protected void updateEnvironment(GnssMeasurementsEvent event, Hmm HMMmodel) {
+    protected void updateEnvironment(GnssMeasurementsEvent event, Hmm<ObservationVector> HMMmodel) {
         double mCnr25 = 0;
-        int mNUM25 = 0;
-        int mSvId = 0;
+        int mNum25 = 0;
 
         List<GnssMeasurement> measurements = new ArrayList<>(event.getMeasurements());
 
@@ -217,14 +227,16 @@ public class EnvnFragment extends Fragment {
         for (int i = 0; i < measurements.size(); i++) {
             mTempConstellation = measurements.get(i).getConstellationType();
             mCnr = measurements.get(i).getCn0DbHz();
-            if ((mTempConstellation == 1 || mTempConstellation == 3) && mCnr >= 25) {
+            if ((mTempConstellation == GnssStatus.CONSTELLATION_GPS ||
+                    mTempConstellation == GnssStatus.CONSTELLATION_GLONASS) && mCnr >= 25) {
                 mCnr25 += mCnr;
-                mNUM25++;
+                mNum25++;
             }
         }
 
         // environment detection
-        Sequences.add(new ObservationReal(mCnr25));
+        double[] feature = {mNum25, mCnr25};
+        Sequences.add(new ObservationVector(feature));
         // cut the length of observations
         if (Sequences.size() > 5) {
             Sequences = Sequences.subList(Sequences.size()-5, Sequences.size());

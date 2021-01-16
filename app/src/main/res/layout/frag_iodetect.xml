@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="@string/environment_unknown"
+        android:text="@string/environment_init"
         android:textSize="26sp" />
 
     <LinearLayout
