@@ -16,16 +16,12 @@ The context detection application is developed for UCL undergraduate module CEGE
 This source code is supplied as an Android Studio project that can be built and run with Android Studio.
 
 ## System Requirement
-- Android API Level > v24
+- Smartphone system: Android 8.0 or higher
 
-## User instruction
-The instruction for using the application can be found on 
-https://github.com/Zidane-Han/Context-Detection-APP/releases/
-
-## Installation
+## Installation and Instruction
 The software can be installed by either source code or from .apk file directly.
 
-The apk file can be downloaded from the following link:
+The apk file and user instruction can be downloaded from the following link:
 
 https://github.com/Zidane-Han/Context-Detection-APP/releases/
 
