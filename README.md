@@ -27,7 +27,7 @@ https://github.com/Zidane-Han/Context-Detection-APP/releases/
 
 ## Reference material
 Further details regarding to the algorithms, please refer to the following publications:
-- Gao, H; Groves, D; (2018) Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone. Navigation, 65 (1), pp. 99-116.  (http://discovery.ucl.ac.uk/10044245/)
+- Gao, H; Groves, PD; (2018) Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone. Navigation, 65 (1), pp. 99-116.  (http://discovery.ucl.ac.uk/10044245/)
 - Gao, H; Groves, PD; (2016) Context Determination for Adaptive Navigation using Multiple Sensors on a Smartphone.  ION GNSS+ 2016, pp. 742-756, Institute of Navigation (ION): Portland, OR, USA.  (http://discovery.ucl.ac.uk/1540225/)
 
 ## Contact
