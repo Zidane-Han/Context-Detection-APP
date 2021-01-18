@@ -11,7 +11,7 @@
 </p>
 
 
-The context detection application is developed for UCL undergraduate module CEGE0095. It demonstates how activity and environment can be inferred from smartphone sensor measurements.
+The context detection application is developed for UCL undergraduate module CEGE0095. It demonstrates how activity and environment can be inferred from smartphone sensor measurements.
 
 This source code is supplied as an Android Studio project that can be built and run with Android Studio.
 
@@ -19,15 +19,15 @@ This source code is supplied as an Android Studio project that can be built and 
 - Smartphone system: Android 8.0 or higher
 
 ## Installation and Instruction
-The software can be installed by either source code or from .apk file directly.
+The software can be installed from either source code or .apk file directly.
 
-The apk file and user instruction can be downloaded from the following link:
+The apk file and user instruction can be obtained from the following link:
 
 https://github.com/Zidane-Han/Context-Detection-APP/releases/
 
 ## Reference material
 Further details regarding to the algorithms, please refer to the following publications:
-- Gao, H; Groves, D; (2018) Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone. Navigation , 65 (1) pp. 99-116.  (http://discovery.ucl.ac.uk/10044245/)
+- Gao, H; Groves, D; (2018) Environmental Context Detection for Adaptive Navigation using GNSS Measurements from a Smartphone. Navigation, 65 (1), pp. 99-116.  (http://discovery.ucl.ac.uk/10044245/)
 - Gao, H; Groves, PD; (2016) Context Determination for Adaptive Navigation using Multiple Sensors on a Smartphone.  ION GNSS+ 2016, pp. 742-756, Institute of Navigation (ION): Portland, OR, USA.  (http://discovery.ucl.ac.uk/1540225/)
 
 ## Contact
